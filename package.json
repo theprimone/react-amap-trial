@@ -1,7 +1,7 @@
 {
-  "name": "react-antd-storybook",
+  "name": "react-amap-trial",
   "version": "1.0.0",
-  "description": "Storybook of react and antd.",
+  "description": "React-AMap trial.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -18,7 +18,10 @@
   "license": "MIT",
   "dependencies": {
     "antd": "^3.26.0",
-    "react": "^16.11.0"
+    "lodash": "^4.17.15",
+    "react": "^16.11.0",
+    "react-amap": "^1.2.8",
+    "react-amap-plugin-custom-geolocation": "^1.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.7.4",
