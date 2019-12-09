@@ -1,0 +1,44 @@
+{
+  "name": "react-antd-storybook",
+  "version": "1.0.0",
+  "description": "Storybook of react and antd.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook",
+    "start": "npm run storybook"
+  },
+  "keywords": [
+    "react",
+    "antd",
+    "storybook"
+  ],
+  "author": "theprimone",
+  "license": "MIT",
+  "dependencies": {
+    "antd": "^3.26.0",
+    "react": "^16.11.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.7.4",
+    "@babel/plugin-proposal-class-properties": "^7.7.4",
+    "@babel/plugin-proposal-decorators": "^7.7.4",
+    "@storybook/addon-actions": "^5.2.6",
+    "@storybook/addon-links": "^5.2.6",
+    "@storybook/addons": "^5.2.6",
+    "@storybook/react": "^5.2.6",
+    "babel-loader": "^8.0.6",
+    "babel-plugin-import": "^1.13.0",
+    "css-loader": "^3.2.0",
+    "eslint": "^6.7.1",
+    "less": "^3.10.3",
+    "less-loader": "^5.0.0",
+    "ts-import-plugin": "^1.6.1",
+    "ts-loader": "^6.2.1",
+    "typescript": "^3.7.2",
+    "webpack": "^4.41.2",
+    "webpack-cli": "^3.3.10",
+    "webpack-node-externals": "^1.7.2"
+  }
+}
