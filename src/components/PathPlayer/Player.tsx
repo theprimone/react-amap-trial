@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card } from 'antd';
+import { Card, Button } from 'antd';
 import styles from './Player.less'
 
 //just some colors
@@ -98,9 +98,20 @@ export default class extends React.Component<PathPlayerProps> {
     }
     return (
       <div className={styles['controls-container']}>
-        <Card>
-          asdf
-        </Card>
+        {path && path.map(item => {
+          return (
+            <Card>
+              {item.name}
+              <br />
+              <Button
+                shape='circle'
+                type='primary'
+              >
+                播放
+              </Button>
+            </Card>
+          )
+        })}
       </div>
     );
   }
