@@ -20,7 +20,8 @@ export interface PathPlayerProps {
 
 export default class extends React.Component<PathPlayerProps> {
   amap: any;
-  pathSimplifier: any;
+  pathSimplifierIns: any;
+  pathNavigs: any[];
 
   constructor(props: PathPlayerProps) {
     super(props);
@@ -32,7 +33,7 @@ export default class extends React.Component<PathPlayerProps> {
 
   loadUI() {
     window.AMapUI.loadUI(['misc/PathSimplifier'], (PathSimplifier) => {
-      this.pathSimplifier = this.initPathSimplifier(PathSimplifier);
+      this.pathSimplifierIns = this.initPathSimplifier(PathSimplifier);
     })
   }
 
@@ -93,8 +94,8 @@ export default class extends React.Component<PathPlayerProps> {
   render() {
     const { path } = this.props;
     console.log(path)
-    if (this.pathSimplifier && Array.isArray(path) && path.length) {
-      this.pathSimplifier.setData(path);
+    if (this.pathSimplifierIns && Array.isArray(path) && path.length) {
+      this.pathSimplifierIns.setData(path);
     }
     return (
       <div className={styles['controls-container']}>
