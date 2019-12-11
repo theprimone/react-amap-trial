@@ -1,22 +1,20 @@
 import React from 'react';
 import AMap from './AMap';
-import Player from './Player';
+import Player, { PlayerProps } from './Player';
 
-export interface Path {
-  path: [number, number];
-  [k: string]: any;
-}
-export interface PathPlayerProps {
-  height: React.CSSProperties['height'];
-  path: Path[];
+export interface PathPlayerProps extends Omit<PlayerProps, '__map__'> {
 }
 
 export default class extends React.Component<PathPlayerProps> {
   render() {
-    const { height = '100vh', path } = this.props;
+    const { panelWidth, height = '100vh', ...rest } = this.props;
     return (
-      <AMap height={height}>
-        <Player path={path} />
+      <AMap height={height} panelWidth={panelWidth}>
+        <Player
+          height={height}
+          panelWidth={panelWidth}
+          {...rest}
+        />
       </AMap>
     );
   }
