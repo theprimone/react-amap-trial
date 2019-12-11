@@ -1,40 +1,52 @@
 import React from 'react';
-import { Card, Button } from 'antd';
+import ReactDOMServer from 'react-dom/server';
 import styles from './Player.less'
+import { PathData, IPathNavigatorIns, IPathSimplifierIns, IPathSimplifier } from '../props';
 
-//just some colors
-const colors = [
-  "#3366cc", "#dc3912", "#ff9900", "#109618", "#990099", "#0099c6", "#dd4477", "#66aa00",
-  "#b82e2e", "#316395", "#994499", "#22aa99", "#aaaa11", "#6633cc", "#e67300", "#8b0707",
-  "#651067", "#329262", "#5574a6", "#3b3eac"
-];
-
-export interface Path {
-  path: [number, number];
-  [k: string]: any;
-}
-export interface PathPlayerProps {
+export interface PlayerProps {
   __map__?: any;
-  path: Path[];
+  colors?: string[];
+  height: React.CSSProperties['height'];
+  panelWidth?: React.CSSProperties['width'];
+  getData: () => Promise<PathData[]> | PathData[];
+  renderItem: (item: PathData, index: number, getNavigator, pathSimplifierIns: IPathSimplifierIns) => JSX.Element;
+
+  pathSimplifierProps?: IPathSimplifier;
+  setPathNavigator?: (pathIndex: number, pathSimplifierIns: IPathSimplifierIns) => IPathNavigatorIns;
 }
-
-export default class extends React.Component<PathPlayerProps> {
+interface PlayerState {
+  data: PathData[];
+  visible: boolean;
+}
+export default class extends React.Component<PlayerProps, PlayerState> {
   amap: any;
-  pathSimplifierIns: any;
-  pathNavigs: any[];
+  PathSimplifier: any;
+  pathSimplifierIns: IPathSimplifierIns;
+  navigators: (IPathNavigatorIns | null)[] = [];
 
-  constructor(props: PathPlayerProps) {
+  constructor(props: PlayerProps) {
     super(props);
     const { __map__: amap } = props;
     if (!amap) { throw new Error("PathPlayer has to be a child of Map component") }
     this.amap = amap;
     this.loadUI();
+    this.state = {
+      data: [],
+      visible: true,
+    };
   }
 
   loadUI() {
-    window.AMapUI.loadUI(['misc/PathSimplifier'], (PathSimplifier) => {
+    const { getData } = this.props;
+    window.AMapUI.loadUI(['misc/PathSimplifier'], async (PathSimplifier) => {
+      this.PathSimplifier = PathSimplifier;
       this.pathSimplifierIns = this.initPathSimplifier(PathSimplifier);
-    })
+      const data = await getData();
+      this.pathSimplifierIns.setData(data);
+      this.setState({
+        data,
+      })
+    });
   }
 
   initPathSimplifier(PathSimplifier) {
@@ -43,33 +55,31 @@ export default class extends React.Component<PathPlayerProps> {
       return;
     }
 
+    const { colors = ['blue'], pathSimplifierProps } = this.props;
     return new PathSimplifier({
       zIndex: 100,
       //autoSetFitView:false,
       map: this.amap, //所属的地图实例
 
       getPath: function (pathData, pathIndex) {
-
         return pathData.path;
       },
-      getHoverTitle: function (pathData, pathIndex, pointIndex) {
 
+      getHoverTitle: function (pathData, pathIndex, pointIndex) {
         if (pointIndex >= 0) {
           //point 
           return pathData.name + '，点:' + pointIndex + '/' + pathData.path.length;
         }
-
         return pathData.name + '，点数量' + pathData.path.length;
       },
+
       renderOptions: {
         pathLineStyle: {
           dirArrowStyle: true
         },
         getPathStyle: function (pathItem, zoom) {
-
-          const color = colors[pathItem.pathIndex],
-            lineWidth = Math.round(4 * Math.pow(1.1, zoom - 3));
-
+          const color = colors[pathItem.pathIndex % colors.length];
+          const lineWidth = Math.round(4 * Math.pow(1.1, zoom - 3));
           return {
             pathLineStyle: {
               strokeStyle: color,
@@ -83,7 +93,8 @@ export default class extends React.Component<PathPlayerProps> {
             }
           }
         }
-      }
+      },
+      ...pathSimplifierProps,
     });
   }
 
@@ -91,27 +102,64 @@ export default class extends React.Component<PathPlayerProps> {
     console.log("AMapUI Loaded Done.")
   }
 
-  render() {
-    const { path } = this.props;
-    console.log(path)
-    if (this.pathSimplifierIns && Array.isArray(path) && path.length) {
-      this.pathSimplifierIns.setData(path);
+  //创建一个默认的轨迹巡航器
+  setDefaultNavigator = (pathIndex: number) => {
+    const navigator: IPathNavigatorIns = this.pathSimplifierIns.createPathNavigator(pathIndex, {
+      loop: true,
+      speed: 100000,
+      // pathNavigatorStyle: {
+      //   width: 16,
+      //   height: 32,
+      //   //使用图片
+      //   content: this.PathSimplifier.Render.Canvas.getImageContent('https://webapi.amap.com/ui/1.0/ui/misc/PathSimplifier/examples/imgs/car.png'),
+      // }
+    });
+
+    const markerContent = ReactDOMServer.renderToStaticMarkup(
+      <div className={styles.markerInfo}>
+        {this.pathSimplifierIns.getPathData(pathIndex).name}
+      </div>
+    )
+
+    navigator.marker = new window.AMap.Marker({
+      offset: new window.AMap.Pixel(12, -10),
+      content: markerContent,
+      map: this.amap,
+    });
+
+    navigator.on('move', function () {
+      navigator.marker.setPosition(navigator.getPosition());
+    });
+
+    navigator.onDestroy(() => {
+      this.navigators[pathIndex] = null;
+      navigator.marker.setMap(null);
+    });
+
+    return navigator;
+  }
+
+  getNavigator = (pathIndex: number) => {
+    if (!this.navigators[pathIndex]) {
+      const { setPathNavigator } = this.props;
+      let navigator: IPathNavigatorIns;
+      if (setPathNavigator) {
+        navigator = setPathNavigator(pathIndex, this.pathSimplifierIns);
+      } else {
+        navigator = this.setDefaultNavigator(pathIndex);
+      }
+      this.navigators[pathIndex] = navigator;
     }
+    return this.navigators[pathIndex];
+  }
+
+  render() {
+    const { panelWidth, height, renderItem } = this.props;
+    const { data } = this.state;
     return (
-      <div className={styles['controls-container']}>
-        {path && path.map(item => {
-          return (
-            <Card>
-              {item.name}
-              <br />
-              <Button
-                shape='circle'
-                type='primary'
-              >
-                播放
-              </Button>
-            </Card>
-          )
+      <div className={!panelWidth && styles['controls-container']} style={{ maxHeight: height }}>
+        {data && data.map((item, index) => {
+          return renderItem(item, index, this.getNavigator, this.pathSimplifierIns);
         })}
       </div>
     );
