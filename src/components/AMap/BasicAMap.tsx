@@ -1,7 +1,7 @@
 import React from "react";
 import { Map, MapProps } from "react-amap";
 import { mapConfig } from '../../config';
-import { LngLat } from "../Props";
+import { LngLat } from "../props";
 
 const defaultPlugins = ["Scale"];
 

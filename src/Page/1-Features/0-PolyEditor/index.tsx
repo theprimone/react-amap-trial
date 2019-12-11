@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import MarkerAMap from '../../../components/AMap/MarkerAMap';
 import PolyEditor from '../../../components/AMap/components/PolyEditor';
 import { Point, Polygon, pointInPolygon } from '../../../utils/pointInPolygon';
-import { LngLat } from '../../../components/Props';
+import { LngLat } from '../../../components/props';
 // import styles from './index.less';
 
 export default function () {

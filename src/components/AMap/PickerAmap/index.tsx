@@ -3,7 +3,7 @@ import Geolocation from "react-amap-plugin-custom-geolocation";
 import MarkerAMap, { MarkerAMapProps } from '../MarkerAMap';
 import PlaceSearch from '../components/PlaceSearch'
 import CurrentAddress from "./CurrentAddress";
-import { LngLat } from "../../Props";
+import { LngLat } from "../../props";
 
 let geocoder = null;
 const titleHeight = 37;

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Polygon, Polyline, PolyEditor } from 'react-amap';
-import { LngLat } from '../../../Props';
+import { LngLat } from '../../../props';
 
 export interface PolyEditorProps {
   __map__?: any;

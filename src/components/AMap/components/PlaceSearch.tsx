@@ -1,6 +1,6 @@
 import React from "react";
 import _find from 'lodash/find';
-import { Poi } from "../../Props";
+import { Poi } from "../../props";
 
 export interface AutocompleteResult {
   count: number;

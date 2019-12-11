@@ -1,7 +1,7 @@
 import React from "react";
 import { Marker } from "react-amap";
 import BasicAMap, { BasicAMapProps } from './BasicAMap';
-import { LngLat } from "../Props";
+import { LngLat } from "../props";
 
 export interface MarkerAMapProps extends BasicAMapProps {
   /** position of Marker */

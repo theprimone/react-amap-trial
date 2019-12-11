@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PickerAmap from '../../../components/AMap/PickerAmap';
-import { LngLat } from '../../../components/Props';
+import { LngLat } from '../../../components/props';
 // import styles from './index.less';
 
 export default function () {
