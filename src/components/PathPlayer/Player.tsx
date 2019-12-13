@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOMServer from 'react-dom/server';
-import styles from './Player.less'
+import styles from './Player.less';
 import { PathData, IPathNavigatorIns, IPathSimplifierIns, IPathSimplifier } from '../props';
 
 export interface PlayerProps {
@@ -12,7 +12,7 @@ export interface PlayerProps {
   renderItem: (item: PathData, index: number, getNavigator, pathSimplifierIns: IPathSimplifierIns) => JSX.Element;
 
   pathSimplifierProps?: IPathSimplifier;
-  setPathNavigator?: (pathIndex: number, pathSimplifierIns: IPathSimplifierIns) => IPathNavigatorIns;
+  setPathNavigator?: (pathIndex: number, pathSimplifierIns: IPathSimplifierIns, PathSimplifier: IPathSimplifier, amap: any, navigators: (IPathNavigatorIns | null)[]) => IPathNavigatorIns;
 }
 interface PlayerState {
   data: PathData[];
@@ -41,6 +41,7 @@ export default class extends React.Component<PlayerProps, PlayerState> {
     window.AMapUI.loadUI(['misc/PathSimplifier'], async (PathSimplifier) => {
       this.PathSimplifier = PathSimplifier;
       this.pathSimplifierIns = this.initPathSimplifier(PathSimplifier);
+
       const data = await getData();
       this.pathSimplifierIns.setData(data);
       this.setState({
@@ -144,7 +145,7 @@ export default class extends React.Component<PlayerProps, PlayerState> {
       const { setPathNavigator } = this.props;
       let navigator: IPathNavigatorIns;
       if (setPathNavigator) {
-        navigator = setPathNavigator(pathIndex, this.pathSimplifierIns);
+        navigator = setPathNavigator(pathIndex, this.pathSimplifierIns, this.PathSimplifier, this.amap, this.navigators);
       } else {
         navigator = this.setDefaultNavigator(pathIndex);
       }
@@ -157,7 +158,7 @@ export default class extends React.Component<PlayerProps, PlayerState> {
     const { panelWidth, height, renderItem } = this.props;
     const { data } = this.state;
     return (
-      <div className={!panelWidth && styles['controls-container']} style={{ maxHeight: height }}>
+      <div className={!panelWidth ? styles['controls-container'] : undefined} style={{ maxHeight: height }}>
         {data && data.map((item, index) => {
           return renderItem(item, index, this.getNavigator, this.pathSimplifierIns);
         })}
