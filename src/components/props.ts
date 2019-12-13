@@ -50,6 +50,8 @@ export interface IPathSimplifier {
   renderConstructor?: any;
   /** 绘制引擎的构造参数，请参见下方 绘制引擎 部分 */
   renderOptions?: RenderOptions;
+
+  Render?: any;
 }
 
 export type PathItem = LngLat | [number, number];
@@ -72,7 +74,7 @@ export interface IPathSimplifierIns {
    */
   toggleTopOfPath: (pathIndex: number, isTop: boolean) => void;
   /** 返回pathIndex对应的轨迹数据项 */
-  getPathData: (pathIndex: number) => any;
+  getPathData: (pathIndex: number) => PathData;
   /** 创建一个轨迹巡航器 */
   createPathNavigator: (pathIndex: number, options: IPathNavigator) => IPathNavigatorIns;
   /** 返回现存的所有轨迹巡航器（已创建未销毁） */
@@ -175,7 +177,7 @@ export interface IPathNavigator {
 
 export interface IPathNavigatorIns {
   /** 开始路径巡航。 pointIndex用于指定巡航的起始节点索引，默认为节点索引范围（range）的最小值 */
-  start: (pointIndex: number) => void;
+  start: (pointIndex?: number) => void;
   /** 暂停巡航 */
   pause: () => void;
   /** 恢复巡航 */
