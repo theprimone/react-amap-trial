@@ -11,9 +11,12 @@ export interface PathMapProps {
 export default function ({ panelWidth, height, children }: React.PropsWithChildren<PathMapProps>) {
   const [position, setPosition] = useState();
   const [amapIns, setAmapIns] = useState();
+  const [amapUILoading, setAmapUILoading] = useState<boolean>(true);
 
-  const initCallback = () => {
+  const initCallback = (AMapUI) => {
     console.log("AMapUI Loaded Done.")
+    console.log(AMapUI);
+    setAmapUILoading(false);
   }
 
   const panelProps = !!panelWidth && {
@@ -36,7 +39,7 @@ export default function ({ panelWidth, height, children }: React.PropsWithChildr
         />
       </div>
       <div {...panelProps}>
-        {amapIns && injectChildren(children, { __map__: amapIns })}
+        {!amapUILoading && amapIns && injectChildren(children, { __map__: amapIns })}
       </div>
     </div>
   )
