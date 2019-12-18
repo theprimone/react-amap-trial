@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import BasicAMap from '../../components/AMap/BasicAMap';
 import { LngLat } from '../props';
 import { injectChildren } from '../../utils';
@@ -9,14 +9,20 @@ export interface PathMapProps {
   height: React.CSSProperties['height'];
 }
 export default function ({ panelWidth, height, children }: React.PropsWithChildren<PathMapProps>) {
+  const [display, setDisplay] = useState(true);
   const [position, setPosition] = useState();
   const [amapIns, setAmapIns] = useState();
-  const [amapUILoading, setAmapUILoading] = useState<boolean>(true);
 
-  const initCallback = (AMapUI) => {
+  useEffect(() => {
+    console.log('unmount AMap');
+    return () => {
+      setDisplay(false);
+      setAmapIns(null);
+    }
+  }, []);
+
+  const initCallback = () => {
     console.log("AMapUI Loaded Done.")
-    console.log(AMapUI);
-    setAmapUILoading(false);
   }
 
   const panelProps = !!panelWidth && {
@@ -30,16 +36,18 @@ export default function ({ panelWidth, height, children }: React.PropsWithChildr
   return (
     <div style={{ position: 'relative' }}>
       <div style={{ height, paddingRight: panelWidth }}>
-        <BasicAMap
-          onClick={(lnglat: LngLat) => setPosition({ lng: lnglat.lng, lat: lnglat.lat })}
-          onCreated={(amap) => { setAmapIns(amap) }}
-          zoom={4}
-          center={position}
-          useAMapUI={initCallback}
-        />
+        {display && (
+          <BasicAMap
+            onClick={(lnglat: LngLat) => setPosition({ lng: lnglat.lng, lat: lnglat.lat })}
+            onCreated={(amap) => { setAmapIns(amap) }}
+            zoom={4}
+            center={position}
+            useAMapUI={initCallback}
+          />
+        )}
       </div>
       <div {...panelProps}>
-        {!amapUILoading && amapIns && injectChildren(children, { __map__: amapIns })}
+        {amapIns && injectChildren(children, { __map__: amapIns })}
       </div>
     </div>
   )
