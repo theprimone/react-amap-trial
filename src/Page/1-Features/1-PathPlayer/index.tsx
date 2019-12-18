@@ -8,6 +8,8 @@ import styles from './index.less';
 let times = 6;
 const dotInterval = 60; // unit: seconds
 
+let currentIdx = 0;
+
 const navigBtnsConf = [{
   name: '开始巡航',
   action: 'start',
@@ -36,8 +38,6 @@ const colors = [
   "#b82e2e", "#316395", "#994499", "#22aa99", "#aaaa11", "#6633cc", "#e67300", "#8b0707",
   "#651067", "#329262", "#5574a6", "#3b3eac"
 ];
-
-let currentIdx = 0;
 
 export default function () {
   useEffect(() => {
@@ -93,7 +93,12 @@ export default function () {
    */
   const onMove = (navigator: IPathNavigatorIns, pathSimplifierIns: IPathSimplifierIns) => {
     const { idx } = navigator.getCursor();
-    // console.log(idx, currentIdx);
+    if (idx === navigator.getPathEndIdx()) {
+      console.log('path end.');
+      currentIdx = 0;
+      return;
+    }
+    console.log(idx, currentIdx);
     if (idx === currentIdx + 1) {
       const nextSpeed = calcSpeed(navigator.getPathIndex(), pathSimplifierIns)(idx);
       console.log('nextSpeed', nextSpeed, 'km/h');
@@ -150,6 +155,7 @@ export default function () {
         setMarkerContent(<div>
           <b>{`${speed.toFixed(2)} km/h`}</b><br />
           <b>{`times: ${times}`}</b><br />
+          {`currentIdx: ${currentIdx}`}<br />
           {`idx: ${idx}`}<br />
           {`tail: ${tail.toFixed(2)}`}<br />
         </div>)
@@ -204,7 +210,7 @@ export default function () {
               <Slider
                 min={1}
                 max={60}
-                step={6}
+                step={1}
                 defaultValue={6}
                 onChange={(value) => {
                   times = Array.isArray(value) ? value[0] : value;
