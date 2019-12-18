@@ -5,8 +5,8 @@ import PathPlayer from '../../../components/PathPlayer';
 import { IPathNavigatorIns, IPathSimplifierIns } from '../../../components/props';
 import styles from './index.less';
 
-const rate = 6;
-const dotInterval = 60; // seconds
+let times = 6;
+const dotInterval = 60; // unit: seconds
 
 const navigBtnsConf = [{
   name: '开始巡航',
@@ -51,39 +51,29 @@ export default function () {
     return [{
       name: 'test',
       path: [
-        { "P": 22.521236546850297, "Q": 113.95209082411202, "lng": 113.952091, "lat": 22.521237 },
-        { "P": 22.52138690124636, "Q": 113.94601816732029, "lng": 113.946018, "lat": 22.521387 },
-        { "P": 22.52138690124636, "Q": 113.94601816732029, "lng": 113.946018, "lat": 22.521387 },
-        // { "P": 22.52138690124636, "Q": 113.94601816732029, "lng": 113.946018, "lat": 22.521387 },
-        // { "P": 22.52138690124636, "Q": 113.94601816732029, "lng": 113.946018, "lat": 22.521387 },
-        // { "P": 22.52138690124636, "Q": 113.94601816732029, "lng": 113.946018, "lat": 22.521387 },
-        // { "P": 22.52138690124636, "Q": 113.94601816732029, "lng": 113.946018, "lat": 22.521387 },
-        // { "P": 22.52138690124636, "Q": 113.94601816732029, "lng": 113.946018, "lat": 22.521387 },
-        // { "P": 22.52138690124636, "Q": 113.94601816732029, "lng": 113.946018, "lat": 22.521387 },
-        // { "P": 22.52138690124636, "Q": 113.94601816732029, "lng": 113.946018, "lat": 22.521387 },
-        // { "P": 22.52138690124636, "Q": 113.94601816732029, "lng": 113.946018, "lat": 22.521387 },
-        // { "P": 22.52138690124636, "Q": 113.94601816732029, "lng": 113.946018, "lat": 22.521387 },
-        // { "P": 22.52138690124636, "Q": 113.94601816732029, "lng": 113.946018, "lat": 22.521387 },
-        // { "P": 22.52138690124636, "Q": 113.94601816732029, "lng": 113.946018, "lat": 22.521387 },
-        // { "P": 22.52138690124636, "Q": 113.94601816732029, "lng": 113.946018, "lat": 22.521387 },
-        // { "P": 22.52138690124636, "Q": 113.94601816732029, "lng": 113.946018, "lat": 22.521387 },
-        // { "P": 22.52138690124636, "Q": 113.94601816732029, "lng": 113.946018, "lat": 22.521387 },
-        // { "P": 22.52138690124636, "Q": 113.94601816732029, "lng": 113.946018, "lat": 22.521387 },
-        // { "P": 22.52138690124636, "Q": 113.94601816732029, "lng": 113.946018, "lat": 22.521387 },
-        { "P": 22.524355947191072, "Q": 113.94611465905382, "lng": 113.946115, "lat": 22.524356 },
-        { "P": 22.529289187357175, "Q": 113.94611998957635, "lng": 113.94612, "lat": 22.529289 },
-        { "P": 22.532707086089108, "Q": 113.94612265483761, "lng": 113.946123, "lat": 22.532707 },
-        { "P": 22.536283453124206, "Q": 113.94552450527954, "lng": 113.945525, "lat": 22.536283 },
-        { "P": 22.539622840772992, "Q": 113.94518938357544, "lng": 113.945189, "lat": 22.539623 },
-        { "P": 22.539958276964086, "Q": 113.94775157539368, "lng": 113.947752, "lat": 22.539958 },
-        { "P": 22.54002690197606, "Q": 113.95051325067902, "lng": 113.950513, "lat": 22.540027 },
-        { "P": 22.53986302874934, "Q": 113.95200137668229, "lng": 113.952001, "lat": 22.539863 },
-        { "P": 22.540016252719848, "Q": 113.95769520642091, "lng": 113.957695, "lat": 22.540016 },
-        { "P": 22.540425622823697, "Q": 113.95950655035404, "lng": 113.959507, "lat": 22.540426 },
-        { "P": 22.53642872656097, "Q": 113.95723648684691, "lng": 113.957236, "lat": 22.536429 },
-        { "P": 22.532606841325972, "Q": 113.95601562440493, "lng": 113.956016, "lat": 22.532607 },
-        { "P": 22.527683201086674, "Q": 113.95489020905302, "lng": 113.95489, "lat": 22.527683 },
-        { "P": 22.522838669485093, "Q": 113.95410811645507, "lng": 113.954108, "lat": 22.522839 }
+        { "P": 22.539530357655636, "Q": 113.93521436499032, "lng": 113.935214, "lat": 22.53953 },
+        { "P": 22.539492415192203, "Q": 113.93763358193974, "lng": 113.937634, "lat": 22.539492 },
+        { "P": 22.539850845046576, "Q": 113.9439151798706, "lng": 113.943915, "lat": 22.539851 },
+        { "P": 22.539850845046576, "Q": 113.9439151798706, "lng": 113.943915, "lat": 22.539851 },
+        { "P": 22.539850845046576, "Q": 113.9439151798706, "lng": 113.943915, "lat": 22.539851 },
+        { "P": 22.539850845046576, "Q": 113.9439151798706, "lng": 113.943915, "lat": 22.539851 },
+        { "P": 22.54011830540123, "Q": 113.9574846296997, "lng": 113.957485, "lat": 22.540118 },
+        { "P": 22.538269473300453, "Q": 113.95838485192866, "lng": 113.958385, "lat": 22.538269 },
+        { "P": 22.53250914005226, "Q": 113.95531590481568, "lng": 113.955316, "lat": 22.532509 },
+        { "P": 22.525833119685796, "Q": 113.95457823483662, "lng": 113.954578, "lat": 22.525833 },
+        { "P": 22.523041747337032, "Q": 113.95401222623445, "lng": 113.954012, "lat": 22.523042 },
+        { "P": 22.521185281807718, "Q": 113.95202190214536, "lng": 113.952022, "lat": 22.521185 },
+        { "P": 22.521595148631857, "Q": 113.95027285186768, "lng": 113.950273, "lat": 22.521595 },
+        { "P": 22.521791936725062, "Q": 113.94399623277286, "lng": 113.943996, "lat": 22.521792 },
+        { "P": 22.521513016089028, "Q": 113.93737629092408, "lng": 113.937376, "lat": 22.521513 },
+        { "P": 22.522382299323137, "Q": 113.9313461850586, "lng": 113.931346, "lat": 22.522382 },
+        { "P": 22.522757475779237, "Q": 113.92995118637089, "lng": 113.929951, "lat": 22.522757 },
+        { "P": 22.524559754921253, "Q": 113.92924283319093, "lng": 113.929243, "lat": 22.52456 },
+        { "P": 22.528084961587826, "Q": 113.92949982525636, "lng": 113.9295, "lat": 22.528085 },
+        { "P": 22.530139435352062, "Q": 113.9307747273865, "lng": 113.930775, "lat": 22.530139 },
+        { "P": 22.53322790817226, "Q": 113.93201299327086, "lng": 113.932013, "lat": 22.533228 },
+        { "P": 22.536278378556375, "Q": 113.93194548070528, "lng": 113.931945, "lat": 22.536278 },
+        { "P": 22.53952696803616, "Q": 113.93192088348388, "lng": 113.931921, "lat": 22.539527 }
       ].map(item => [item.lng, item.lat]) as any
     }]
   }
@@ -91,12 +81,19 @@ export default function () {
   const calcSpeed = (pathIndex: number, pathSimplifierIns: IPathSimplifierIns) => (start, step = 1) => {
     const pathData = pathSimplifierIns.getPathData(pathIndex);
     const distance = window.AMap.GeometryUtil.distance(pathData.path[start], pathData.path[start + step]);  // unit: m
-    return (distance / 1000) / (dotInterval / 60 / 60) * rate;
+    const speed = (distance / 1000) / (dotInterval / 60 / 60);  // km/h
+    return speed * times;  // 乘以放大倍数
   }
 
+  /**
+   * 高德地图渲染重复数据点的，只会渲染一个点，且该点的 idx 为最后一个数据点的 idx
+   * 
+   * @param navigator 
+   * @param pathSimplifierIns 
+   */
   const onMove = (navigator: IPathNavigatorIns, pathSimplifierIns: IPathSimplifierIns) => {
     const { idx } = navigator.getCursor();
-    console.log(idx, currentIdx);
+    // console.log(idx, currentIdx);
     if (idx === currentIdx + 1) {
       const nextSpeed = calcSpeed(navigator.getPathIndex(), pathSimplifierIns)(idx);
       console.log('nextSpeed', nextSpeed, 'km/h');
@@ -105,6 +102,7 @@ export default function () {
       currentIdx = idx;
     } else if (idx > currentIdx + 1) {
       navigator.setSpeed(0);
+      const intervalSeconds = (idx - currentIdx - 1) * dotInterval * 1000;
       const timer = setTimeout(() => {
         const nextSpeed = calcSpeed(navigator.getPathIndex(), pathSimplifierIns)(idx);
         console.log('nextSpeed', nextSpeed, 'km/h');
@@ -112,11 +110,11 @@ export default function () {
 
         currentIdx = idx;
         clearTimeout(timer);
-      }, (idx - currentIdx) * (dotInterval * 1000) / rate);
+      }, intervalSeconds / times);
     }
   }
 
-  const setPathNavigator = (pathIndex: number, pathSimplifierIns: IPathSimplifierIns, PathSimplifier: any, amap, navigators) => {
+  const setPathNavigator = (pathIndex: number, pathSimplifierIns: IPathSimplifierIns, PathSimplifier: any, amap, navigators: (IPathNavigatorIns | null)[]) => {
     const initSpeed = calcSpeed(pathIndex, pathSimplifierIns)(0);
     console.log('initSpeed', initSpeed, 'km/h');
     const navigator: IPathNavigatorIns = pathSimplifierIns.createPathNavigator(pathIndex, {
@@ -130,21 +128,32 @@ export default function () {
       },
     });
 
-    const markerContent = ReactDOMServer.renderToStaticMarkup(
+
+    const setMarkerContent = (extra?: any) => ReactDOMServer.renderToStaticMarkup(
       <div className={styles.markerInfo}>
-        {pathSimplifierIns.getPathData(pathIndex).name}
+        {pathSimplifierIns.getPathData(pathIndex).name} {extra}
       </div>
     )
 
     navigator.marker = new window.AMap.Marker({
       offset: new window.AMap.Pixel(12, -10),
-      content: markerContent,
+      content: setMarkerContent(),
       map: amap,
     });
 
     navigator.on('move', function () {
       navigator.marker.setPosition(navigator.getPosition());
       onMove(navigator, pathSimplifierIns);
+      const { idx, tail } = navigator.getCursor();
+      const speed = navigator?.getSpeed() / times;
+      navigator.marker.setContent(
+        setMarkerContent(<div>
+          <b>{`${speed.toFixed(2)} km/h`}</b><br />
+          <b>{`times: ${times}`}</b><br />
+          {`idx: ${idx}`}<br />
+          {`tail: ${tail.toFixed(2)}`}<br />
+        </div>)
+      );
     });
 
     navigator.onDestroy(() => {
@@ -193,13 +202,12 @@ export default function () {
                 })}
               </Radio.Group>
               <Slider
-                min={1000}
-                max={1000000}
-                step={1000}
-                defaultValue={100000}
+                min={1}
+                max={60}
+                step={6}
+                defaultValue={6}
                 onChange={(value) => {
-                  const navigator = getNavigator(index);
-                  navigator.setSpeed(value);
+                  times = Array.isArray(value) ? value[0] : value;
                 }}
               />
               km/h
