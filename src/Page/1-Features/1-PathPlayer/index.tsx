@@ -153,7 +153,7 @@ export default function () {
       const speed = navigator?.getSpeed() / times;
       navigator.marker.setContent(
         setMarkerContent(<div>
-          <b>{`${speed.toFixed(2)} km/h`}</b><br />
+          <b>{`${speed.toFixed(2)} KM/H`}</b><br />
           <b>{`times: ${times}`}</b><br />
           {`currentIdx: ${currentIdx}`}<br />
           {`idx: ${idx}`}<br />
