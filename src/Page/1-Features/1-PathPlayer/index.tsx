@@ -49,7 +49,7 @@ export default function () {
     // const response = await fetch('https://a.amap.com/amap-ui/static/data/big-routes.json');
     // return await response.json();
     return [{
-      name: 'test',
+      name: '测试数据',
       path: [
         { "P": 22.539530357655636, "Q": 113.93521436499032, "lng": 113.935214, "lat": 22.53953 },
         { "P": 22.539492415192203, "Q": 113.93763358193974, "lng": 113.937634, "lat": 22.539492 },
