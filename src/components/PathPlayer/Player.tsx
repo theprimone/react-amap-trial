@@ -16,7 +16,6 @@ export interface PlayerProps {
 }
 interface PlayerState {
   data: PathData[];
-  visible: boolean;
 }
 export default class extends React.Component<PlayerProps, PlayerState> {
   amap: any;
@@ -29,11 +28,16 @@ export default class extends React.Component<PlayerProps, PlayerState> {
     const { __map__: amap } = props;
     if (!amap) { throw new Error("PathPlayer has to be a child of Map component") }
     this.amap = amap;
+    console.log('Player: loadUI');
     this.loadUI();
     this.state = {
       data: [],
-      visible: true,
     };
+  }
+
+  componentWillUnmount() {
+    console.log('Player: unmount');
+    this.pathSimplifierIns.clearPathNavigators();
   }
 
   loadUI() {
