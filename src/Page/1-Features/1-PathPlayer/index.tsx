@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import ReactDOMServer from 'react-dom/server';
+import _last from 'lodash/last';
 import { Card, Radio, Slider } from 'antd';
 import PathPlayer from '../../../components/PathPlayer';
 import { IPathNavigatorIns, IPathSimplifierIns } from '../../../components/props';
@@ -98,7 +99,7 @@ export default function () {
       currentIdx = 0;
       return;
     }
-    console.log(idx, currentIdx);
+    // console.log(idx, currentIdx);
     if (idx === currentIdx + 1) {
       const nextSpeed = calcSpeed(navigator.getPathIndex(), pathSimplifierIns)(idx);
       console.log('nextSpeed', nextSpeed, 'km/h');
@@ -160,6 +161,15 @@ export default function () {
           {`tail: ${tail.toFixed(2)}`}<br />
         </div>)
       );
+
+      // set onClick to marker
+      // const markers = document.getElementsByClassName(styles.markerInfo)
+      // console.log('markerInfo');
+      // if (markers.length) {
+      //   _last(markers)?.addEventListener('click', () => {
+      //     console.log('click marker');
+      //   });
+      // }
     });
 
     navigator.onDestroy(() => {
