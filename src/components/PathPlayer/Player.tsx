@@ -9,6 +9,7 @@ export interface PlayerProps {
   height: React.CSSProperties['height'];
   panelWidth?: React.CSSProperties['width'];
   getData: () => Promise<PathData[]> | PathData[];
+  afterGetData?: (pathSimplifierIns: IPathSimplifierIns, amap: any) => void;
   renderItem: (item: PathData, index: number, getNavigator, pathSimplifierIns: IPathSimplifierIns) => JSX.Element;
 
   pathSimplifierProps?: IPathSimplifier;
@@ -41,16 +42,17 @@ export default class extends React.Component<PlayerProps, PlayerState> {
   }
 
   loadUI() {
-    const { getData } = this.props;
+    const { getData, afterGetData = () => { } } = this.props;
     window.AMapUI.loadUI(['misc/PathSimplifier'], async (PathSimplifier) => {
       this.PathSimplifier = PathSimplifier;
       this.pathSimplifierIns = this.initPathSimplifier(PathSimplifier);
 
       const data = await getData();
       this.pathSimplifierIns.setData(data);
+      afterGetData(this.pathSimplifierIns, this.amap);
       this.setState({
         data,
-      })
+      });
     });
   }
 
