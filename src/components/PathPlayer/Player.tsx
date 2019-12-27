@@ -13,7 +13,7 @@ export interface PlayerProps {
   renderItem: (item: PathData, index: number, getNavigator, pathSimplifierIns: IPathSimplifierIns) => JSX.Element;
 
   pathSimplifierProps?: IPathSimplifier;
-  setPathNavigator?: (pathIndex: number, pathSimplifierIns: IPathSimplifierIns, PathSimplifier: IPathSimplifier, amap: any, navigators: (IPathNavigatorIns | null)[]) => IPathNavigatorIns;
+  setPathNavigator?: (pathIndex: number, startIndex?: number) => (instances: { pathSimplifierIns: IPathSimplifierIns; PathSimplifierClass: IPathSimplifier; amap: any; navigators: (IPathNavigatorIns | null)[] }) => IPathNavigatorIns;
 }
 interface PlayerState {
   data: PathData[];
@@ -146,12 +146,15 @@ export default class extends React.Component<PlayerProps, PlayerState> {
     return navigator;
   }
 
-  getNavigator = (pathIndex: number) => {
+  /**
+   * 当没有巡航器时，调用方法创建巡航器并返回对应巡航器
+   */
+  getNavigator = (pathIndex: number, startIndex?: number) => {
     if (!this.navigators[pathIndex]) {
       const { setPathNavigator } = this.props;
       let navigator: IPathNavigatorIns;
       if (setPathNavigator) {
-        navigator = setPathNavigator(pathIndex, this.pathSimplifierIns, this.PathSimplifier, this.amap, this.navigators);
+        navigator = setPathNavigator(pathIndex, startIndex)({ pathSimplifierIns: this.pathSimplifierIns, PathSimplifierClass: this.PathSimplifier, amap: this.amap, navigators: this.navigators });
       } else {
         navigator = this.setDefaultNavigator(pathIndex);
       }

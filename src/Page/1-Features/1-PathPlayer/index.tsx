@@ -120,65 +120,67 @@ export default function () {
     }
   }
 
-  const setPathNavigator = (pathIndex: number, pathSimplifierIns: IPathSimplifierIns, PathSimplifier: any, amap, navigators: (IPathNavigatorIns | null)[]) => {
-    const initSpeed = calcSpeed(pathIndex, pathSimplifierIns)(0);
-    console.log('initSpeed', initSpeed, 'km/h');
-    const navigator: IPathNavigatorIns = pathSimplifierIns.createPathNavigator(pathIndex, {
-      loop: true,
-      speed: initSpeed,
-      pathNavigatorStyle: {
-        width: 16,
-        height: 32,
-        //使用图片
-        content: PathSimplifier.Render.Canvas.getImageContent('https://webapi.amap.com/ui/1.0/ui/misc/PathSimplifier/examples/imgs/car.png'),
-      },
-    });
+  const setPathNavigator =
+    (pathIndex: number) =>
+      ({ pathSimplifierIns, PathSimplifierClass, amap, navigators }: { pathSimplifierIns: IPathSimplifierIns, PathSimplifierClass: any, amap, navigators: (IPathNavigatorIns | null)[] }) => {
+        const initSpeed = calcSpeed(pathIndex, pathSimplifierIns)(0);
+        console.log('initSpeed', initSpeed, 'km/h');
+        const navigator: IPathNavigatorIns = pathSimplifierIns.createPathNavigator(pathIndex, {
+          loop: true,
+          speed: initSpeed,
+          pathNavigatorStyle: {
+            width: 16,
+            height: 32,
+            //使用图片
+            content: PathSimplifierClass.Render.Canvas.getImageContent('https://webapi.amap.com/ui/1.0/ui/misc/PathSimplifier/examples/imgs/car.png'),
+          },
+        });
 
 
-    const setMarkerContent = (extra?: any) => ReactDOMServer.renderToStaticMarkup(
-      <div className={styles.markerInfo}>
-        {pathSimplifierIns.getPathData(pathIndex).name} {extra}
-      </div>
-    )
+        const setMarkerContent = (extra?: any) => ReactDOMServer.renderToStaticMarkup(
+          <div className={styles.markerInfo}>
+            {pathSimplifierIns.getPathData(pathIndex).name} {extra}
+          </div>
+        )
 
-    navigator.marker = new window.AMap.Marker({
-      offset: new window.AMap.Pixel(12, -10),
-      content: setMarkerContent(),
-      map: amap,
-    });
+        navigator.marker = new window.AMap.Marker({
+          offset: new window.AMap.Pixel(12, -10),
+          content: setMarkerContent(),
+          map: amap,
+        });
 
-    navigator.on('move', function () {
-      navigator.marker.setPosition(navigator.getPosition());
-      onMove(navigator, pathSimplifierIns);
-      const { idx, tail } = navigator.getCursor();
-      const speed = navigator?.getSpeed() / times;
-      navigator.marker.setContent(
-        setMarkerContent(<div>
-          <b>{`${speed.toFixed(2)} KM/H`}</b><br />
-          <b>{`times: ${times}`}</b><br />
-          {`currentIdx: ${currentIdx}`}<br />
-          {`idx: ${idx}`}<br />
-          {`tail: ${tail.toFixed(2)}`}<br />
-        </div>)
-      );
+        navigator.on('move', function () {
+          navigator.marker.setPosition(navigator.getPosition());
+          onMove(navigator, pathSimplifierIns);
+          const { idx, tail } = navigator.getCursor();
+          const speed = navigator?.getSpeed() / times;
+          navigator.marker.setContent(
+            setMarkerContent(<div>
+              <b>{`${speed.toFixed(2)} KM/H`}</b><br />
+              <b>{`times: ${times}`}</b><br />
+              {`currentIdx: ${currentIdx}`}<br />
+              {`idx: ${idx}`}<br />
+              {`tail: ${tail.toFixed(2)}`}<br />
+            </div>)
+          );
 
-      // set onClick to marker
-      // const markers = document.getElementsByClassName(styles.markerInfo)
-      // console.log('markerInfo');
-      // if (markers.length) {
-      //   _last(markers)?.addEventListener('click', () => {
-      //     console.log('click marker');
-      //   });
-      // }
-    });
+          // set onClick to marker
+          // const markers = document.getElementsByClassName(styles.markerInfo)
+          // console.log('markerInfo');
+          // if (markers.length) {
+          //   _last(markers)?.addEventListener('click', () => {
+          //     console.log('click marker');
+          //   });
+          // }
+        });
 
-    navigator.onDestroy(() => {
-      navigators[pathIndex] = null;
-      navigator.marker.setMap(null);
-    });
+        navigator.onDestroy(() => {
+          navigators[pathIndex] = null;
+          navigator.marker.setMap(null);
+        });
 
-    return navigator;
-  }
+        return navigator;
+      }
 
   return (
     <div>
